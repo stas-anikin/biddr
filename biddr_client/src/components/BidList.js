@@ -1,24 +1,17 @@
 import React from "react";
+import BidDetails from "./BidDetails";
 
-import { BidDetails } from "./BidDetails";
-
-export const BidList = props => {
+export function BidList(props) {
+  const { bids } = props;
   return (
-    <div
-        style={{
-        marginTop: "4em"
-        }}
-        >
-        <h2 className="ui horizontal divider header">Previous Bids</h2>
-        <ul className="ui list">
-            {props.bids.map(bid => (
-                <BidDetails
-                key={bid.id}
-                {...bid}
-                />
-            ))}
-        </ul>
-    </div>
+    <ul>
+      {bids.map(bid => (
+        <li key={bid.id}>
+        
+          <BidDetails {...bid} onDeleteClick={props.onBidDeleteClick} />
+          <br />
+        </li>
+      ))}
+    </ul>
   );
-};
-
+}

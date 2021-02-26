@@ -1,58 +1,79 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
+import { Session } from "../requests";
 
-import { Session } from "../api/session";
+class SignInPage extends Component {
+  constructor(props) {
+    super(props);
 
-export const SignInPage = props => {
-    const [errors, setErrors] = useState([]);
-  
-    const createSession = event => {
-      event.preventDefault();
-      const { currentTarget: form } = event;
-  
-      const fd = new FormData(form);
-  
-      Session.create({
-        email: fd.get("email"),
-        password: fd.get("password")
-      }).then(data => {
-        if (data.status === 404) {
-          setErrors([...errors, { message: "Wrong Email or Password" }]);
-        } else {
-          props.history.push("/");
-          if (typeof props.onSignIn === "function") {
-            props.onSignIn();
-          }
-        }
-      });
+    this.state = {
+      errors: []
     };
+
+    this.createSession = this.createSession.bind(this);
+  }
+
+  createSession(event) {
+    event.preventDefault();
+    const { currentTarget } = event;
+    const fd = new FormData(currentTarget);
+
+    Session.create({
+      email: fd.get("email"),
+      password: fd.get("password")
+    }).then(data => {
+      if (data.status === 404) {
+        this.setState({
+          errors: [{ message: "Wrong email or password" }]
+        });
+      } else {
+        this.setState({
+          errors: []
+        });
+        this.props.history.push("/");
+
+        if (typeof this.props.onSignIn === "function") {
+          this.props.onSignIn();
+        }
+      }
+    });
+  }
+  render() {
+    const { errors } = this.state;
     return (
-      <div className="ui clearing segment Page">
-        <h1 className="ui center aligned header">Sign In</h1>
-        <form className="ui large form" onSubmit={createSession}>
+      <main>
+        <div className="ui header">Sign In</div>
+        <form className="ui form" onSubmit={this.createSession}>
           {errors.length > 0 ? (
-            <div className="ui negative message">
-              <div className="header">Failed to Sign In</div>
-              <p>{errors.map(error => error.message).join(", ")}</p>
+            <div className="ui negative message FormErrors">
+              <div className="header">Error Signing in...</div>
+              <p>{errors.map(err => err.message).join(",")}</p>
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
           <div className="field">
             <label htmlFor="email">Email</label>
-            <input type="email" name="email" id="email" required />
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="email"
+            />
           </div>
           <div className="field">
             <label htmlFor="password">Password</label>
-            <input type="password" name="password" id="password" required />
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="password"
+            />
           </div>
-  
-          <input
-            className="ui right floated orange button"
-            type="submit"
-            value="Sign In"
-          />
+          <button className="ui blue button" type="submit">
+            Sign In
+          </button>
         </form>
-      </div>
+      </main>
     );
-  };
-  
+  }
+}
+
+export default SignInPage;

@@ -1,5 +1,5 @@
 <h1><%= @auction.title %></h1>
-<p><%= @auction.body %></p>
+<p><%= @auction.description %></p>
 <p>Current Price: <%= @auction.reserve_price %></p>
 <p>Ends at: <%= @auction.end_date %></p>
 
@@ -13,7 +13,7 @@
 
             <div class="form-group">
                 <%= f.text_field(
-                    :price,
+                    :amount,
                     cols: 50,
                     rows: 3,
                     placeholder:"e.g. $100",
@@ -28,7 +28,7 @@
 <h3>Previous Bids:</h3>
 <% if @bids.all.length != 0 %>
     <% @bids.each do |bid| %>
-    <p>$<%=bid.price%> on <%= bid.created_at %></p>
+    <p>$<%=bid.amount%> on <%= bid.created_at %></p>
     <% end %>
 <% else %>
     <p>No previous bids to date.</p>

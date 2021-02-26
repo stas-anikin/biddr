@@ -1,14 +1,15 @@
 import React from "react";
+import { User } from "../requests";
 
-import { User } from "../api/user";
+export function SignUpPage(props) {
+  const { onSignUp } = props;
 
-export const SignUpPage = props => {
-  const handleSubmit = event => {
+  function handleSubmit(event) {
     event.preventDefault();
-    const { currentTarget: form } = event;
-    const fd = new FormData(form);
+    const { currentTarget } = event;
+    const fd = new FormData(currentTarget);
 
-    const newUser = {
+    const signUpParams = {
       first_name: fd.get("first_name"),
       last_name: fd.get("last_name"),
       email: fd.get("email"),
@@ -16,49 +17,73 @@ export const SignUpPage = props => {
       password_confirmation: fd.get("password_confirmation")
     };
 
-    User.create(newUser).then(response => {
-      if (response.id) {
-        if (typeof props.onSignUp === "function") {
-          props.onSignUp();
-        }
+    User.create(signUpParams).then(res => {
+      if (res.id) {
+        onSignUp();
+        // Once we are successfully signed up and in, and the app has a user in our state,
         props.history.push("/questions");
       }
     });
-  };
+  }
+
   return (
-    <div className="ui clearing segment Page">
-      <h1 className="ui center aligned header">Sign Up</h1>
-      <form className="ui large form" onSubmit={handleSubmit}>
+    <main>
+      <form className="ui form" onSubmit={handleSubmit}>
         <div className="field">
           <label htmlFor="first_name">First Name</label>
-          <input type="text" name="first_name" id="first_name" />
+          <input
+            type="text"
+            name="first_name"
+            id="first_name"
+            placeholder="First Name"
+            required
+          />
         </div>
         <div className="field">
           <label htmlFor="last_name">Last Name</label>
-          <input type="text" name="last_name" id="last_name" />
+          <input
+            type="text"
+            name="last_name"
+            id="last_name"
+            placeholder="Last Name"
+            required
+          />
         </div>
         <div className="field">
           <label htmlFor="email">Email</label>
-          <input type="email" name="email" id="email" required />
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Email"
+            required
+          />
         </div>
         <div className="field">
           <label htmlFor="password">Password</label>
-          <input type="password" name="password" id="password" required />
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
         </div>
         <div className="field">
-          <label htmlFor="password_confirmation">Enter Password Again</label>
+          <label htmlFor="password_confirmation">Password Confirmation</label>
           <input
             type="password"
             name="password_confirmation"
             id="password_confirmation"
+            placeholder="Password confirmation"
             required
           />
         </div>
-        <button className="ui right floated orange button" type="submit">
+
+        <button className="ui blue button" type="submit">
           Sign Up
         </button>
       </form>
-    </div>
+    </main>
   );
-};
-
+}

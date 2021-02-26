@@ -1,53 +1,49 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-export const NavBar = ({ currentUser, onSignOut, showTime }) => {
-    const handleSignOutClick = event => {
-        event.preventDefault();
-        if (typeof onSignOut === "function") {
-          onSignOut();
-        }
-    };
-    return (
-        <div className="ui secondary pointing menu">
-            <div className="left menu">
-            <NavLink exact to="/" className="item">
-                <img className="ui mini image" src="https://dygtyjqp7pi0m.cloudfront.net/i/5667/8604315_1m.jpg?v=8CBEF049EB11640" alt="coins" />
+function NavBar(props) {
+  const { currentUser, onSignOut } = props;
+  return (
+    <div className="ui menu">
+      <NavLink to="/" className="item">
+        <img
+          src="https://as1.ftcdn.net/jpg/00/56/57/76/500_F_56577647_KPsCxcMXNQSIDhpW8tfzABCGPeSsaJNk.jpg"
+          height="30px"
+        />
+      </NavLink>
+
+      <div className="right menu">
+        <NavLink to="/" className="item">
+          Home
+        </NavLink>
+        <NavLink to="/auctions" className="item">
+          Auctions
+        </NavLink>
+        {currentUser ? (
+          <>
+            <NavLink exact to="/auctions/new" className="item">
+              Create an Auction
             </NavLink>
-            </div>
-            <div className="right menu">
-                <NavLink exact to="/" className="item">
-                    Home
-                </NavLink>
-                <NavLink exact to="/auctions" className="item">
-                    Auctions
-                </NavLink>
-                <NavLink exact to="/auctions/new" className="item">
-                    New Auction
-                </NavLink>
-                {!currentUser && (
-                <>
-                    <NavLink exact to="/sign_in" className="ui black button">
-                        Sign In
-                    </NavLink>
-                    <NavLink exact to="/sign_up" className="ui black button">
-                    Sign Up
-                    </NavLink>
-                </>
-                )}
-                {currentUser && (
-                <>
-                    <div className="item">Hello {currentUser.full_name}</div>
-                    <button
-                    // href=""
-                    className="ui inverted red button"
-                    onClick={handleSignOutClick}
-                    >
-                    Sign Out
-                    </button>
-                </>
-                )}
-            </div>
-        </div>
-    );
-};
+            <NavLink to="/auctions" onClick={onSignOut} className="item">
+              Sign Out
+            </NavLink>
+            <span className="item">
+              Signed in as {currentUser.full_name}
+            </span>
+          </>
+        ) : (
+          <React.Fragment>
+            <NavLink exact to="/sign_in" className="item">
+              Sign In
+            </NavLink>
+            <NavLink exact to="/sign_up" className="item">
+              Sign Up
+            </NavLink>
+          </React.Fragment>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default NavBar;

@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-
   root "welcome#index"
 
   resources :users, only: [:new, :create]
@@ -10,12 +8,15 @@ Rails.application.routes.draw do
   resources :auctions do
     resources :bids, shallow: true, only: :create
   end
-
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      resources :auctions
+      resources :auctions do
+        resources :bids, only: [:create, :destroy, :index, :show]
+        resources :publishings, only: :create
+        resources :reservings, only: :create
+      end
       resource :session, only: [:create, :destroy]
-      resource :users, only: [:create] do
+      resources :users, shallow: true, only: [:create, :new, :show, :index] do
         get :current, on: :collection
       end
     end

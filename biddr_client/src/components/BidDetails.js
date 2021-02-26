@@ -1,11 +1,10 @@
 import React from "react";
-
-export const BidDetails = props => {
+function BidDetails(props) {
   return (
-    <div className="ui segment list">
-        <p>
-        ${props.price} on {props.created_at.toLocaleString()}
-        </p>
+    <div>{props.author.first_name} {props.author.last_name} bid ${props.amount} at {" "}
+      {props.created_at}
     </div>
   );
-};
+}
+
+export default BidDetails;

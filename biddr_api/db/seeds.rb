@@ -1,18 +1,24 @@
-User.destroy_all
-Auction.destroy_all
-Bid.destroy_all
+# This file should contain all the record creation needed to seed the database with its default values.
+# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
+#
+# Examples:
+#
+#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
+#   Character.create(name: 'Luke', movie: movies.first)
 
+Bid.delete_all
+Auction.delete_all
+User.delete_all
 PASSWORD = "123"
-
-super_user = User.create(
-  first_name: "test",
-  last_name: "user",
-  email: "test@test.com",
-  password: PASSWORD,
+admin = User.create(
+  first_name: "admin",
+  last_name: "admin",
+  email: "admin@admin.com",
+  password: "123",
   is_admin: true,
 )
 
-10.times do
+5.times do
   first_name = Faker::Name.first_name
   last_name = Faker::Name.last_name
   User.create(
@@ -25,29 +31,30 @@ end
 
 users = User.all
 
-10.times do
-  user = users.sample
-  a = Auction.create(
-    title: Faker::Commerce.product_name,
-    body: Faker::Hipster.sentence,
-    reserve_price: Faker::Number.decimal(l_digits: 2),
-    end_date: Faker::Date.forward(days: 90),
-    created_at: Faker::Date.backward(days: 365 * 5),
-    updated_at: Faker::Date.backward(days: 365 * 5),
-    user_id: user.id,
-  )
+5.times do
+  created_at = Faker::Date.backward(days: 365 * 5)
+  end_at = Faker::Date.backward(days: 365 * 5)
+  auction = Auction.create(
 
-  if a.valid?
-    rand(0..5).times.each do
-      user = users.sample
-      b = Bid.create(
-        price: Faker::Number.decimal(l_digits: 2),
-        user_id: user.id,
-        auction: a,
+    title: Faker::Commerce.product_name,
+    description: Faker::Hipster.sentence,
+    reserve_price: Faker::Number.decimal(l_digits: 2),
+    aasm_state: :published,
+    end_date: end_at,
+    created_at: created_at,
+    updated_at: created_at,
+    user: users.sample,
+  )
+  if auction.valid?
+    auction.bids = rand(0..5).times.map do
+      Bid.new(
+        amount: Faker::Number.decimal(l_digits: 2),
+        user: users.sample,
       )
     end
   end
 end
+
 auctions = Auction.all
 users = User.all
 bids = Bid.all

@@ -1,5 +1,5 @@
 class AuctionsController < ApplicationController
-#   before_action :authenticate_user!, except: [:index, :show]
+  #   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_auction, only: [:show]
   before_action :auction_params, only: [:create]
 
@@ -28,7 +28,7 @@ class AuctionsController < ApplicationController
 
   def show
     @bid = Bid.new
-    @bids = @auction.bids.order(price: :DESC)
+    @bids = @auction.bids.order(amount: :DESC)
     respond_to do |format|
       format.json { render json: @auction }
       format.html { render :show }
