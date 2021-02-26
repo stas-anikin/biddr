@@ -28,8 +28,8 @@ users = User.all
 10.times do
   user = users.sample
   a = Auction.create(
-    title: Faker::Superhero.name,
-    body: Faker::Coffee.notes,
+    title: Faker::Commerce.product_name,
+    body: Faker::Hipster.sentence,
     reserve_price: Faker::Number.decimal(l_digits: 2),
     end_date: Faker::Date.forward(days: 90),
     created_at: Faker::Date.backward(days: 365 * 5),
