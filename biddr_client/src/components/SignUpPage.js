@@ -20,8 +20,7 @@ export function SignUpPage(props) {
     User.create(signUpParams).then(res => {
       if (res.id) {
         onSignUp();
-        // Once we are successfully signed up and in, and the app has a user in our state,
-        props.history.push("/questions");
+        props.history.push("/auctions");
       }
     });
   }
