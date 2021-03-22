@@ -4,15 +4,10 @@ class Auction < ApplicationRecord
   before_validation :set_default_reserve_price
 
 
-  # validates(:title, presence: true, uniqueness: true)
-  # validates :description,
-  #             presence: { message: "must exist"}, length: { minimum: 2 }
-
   scope :viewable, -> { 
     where(aasm_state: [:published, :reserve_met])
   }
 
-  #State machines
   include AASM
 
   aasm whiny_transitions: false do
@@ -32,9 +27,7 @@ class Auction < ApplicationRecord
   private
 
   def set_default_reserve_price
-    # If you are writing to an attribute accessor,
-    # you must prefix with self. which you do not
-    # have to do if you are just reading it insead
+
     self.reserve_price ||= 1
   end
 

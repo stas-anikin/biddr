@@ -1,6 +1,6 @@
 class BidsController < ApplicationController
 
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
   before_action :bid_params, only: [:create]
 
   def create
